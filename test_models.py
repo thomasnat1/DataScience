@@ -25,7 +25,7 @@ def read_file(filename):
 
 
 def main():
-    filename = 'mystery0.dat'
+    filename = 'mystery2.dat'
     data = read_file(filename)
     cdf = thinkstats2.MakeCdfFromList(data)
 

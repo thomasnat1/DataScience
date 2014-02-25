@@ -32,11 +32,6 @@ from scipy.special import erf, erfinv
 
 ROOT2 = math.sqrt(2)
 
-def RMSE(estimates, actual):
-    e2 = [(estimates - actual) ** 2  for estimate in estimates]
-    mse = numpy.mean(e2)
-    return math.sqrt(mse)
-
 def RandomSeed(x):
     """Initialize the random and numpy.random generators.
 
