@@ -25,18 +25,12 @@ def ReadData(data_dir='.'):
 
 
 def SimulateNull(xs, ys):
-    """
-        shuffles both the xs list and ys list, recalculates, and returns the correlation
-
-        xs, ys: lists of data
-    """
     random.shuffle(xs)
     random.shuffle(ys)
     return thinkstats2.Corr(xs, ys)
 
 
 def PValue(xs, ys, n=10):
-
     actual = thinkstats2.Corr(xs, ys)
 
     xs_copy = list(xs)
@@ -57,17 +51,19 @@ def PValue(xs, ys, n=10):
 def main(name, data_dir='.'):
     xs, ys = ReadData(data_dir)
 
-    thinkplot.Scatter(xs, ys, alpha=0.1)
-    thinkplot.Show(xlabel='Age (years)',
-                   ylabel='Birth weight (oz)')
+    thinkplot.Scatter(xs, ys, alpha=0.05)
+    thinkplot.Save(root='correlate1',
+                   xlabel='Age (years)',
+                   ylabel='Birth weight (oz)',
+                   axis=[9,45,0,250])
 
     print 'Pearson', thinkstats2.Corr(xs, ys)
     print 'Spearman', thinkstats2.SpearmanCorr(xs, ys)
 
     for i in range(10):
-        print "Result simulate null: ", SimulateNull(list(xs), list(ys))
+        print SimulateNull(list(xs), list(ys))
 
-    print PValue(xs, ys, 5000)
+    print PValue(xs, ys, 1000)
 
 
 if __name__ == '__main__':
