@@ -149,7 +149,7 @@ class _DictWrapper(object):
             except AttributeError:
                 continue
 
-        if len(self) > 0:
+        if len(self) > 0 and isinstance(self, Pmf):
             self.Normalize()
 
     def InitSequence(self, values):
@@ -1858,6 +1858,11 @@ def NormalProbability(ys, jitter=0.0):
     return xs, ys
 
 
+def Jitter(values, jitter=0.5):
+    """Jitters the values by adding a uniform variate in (-jitter, jitter)."""
+    return numpy.random.uniform(-jitter, +jitter, n) + values
+
+
 def FitLine(xs, inter, slope):
     """Fits a line to the given data.
 
@@ -1914,6 +1919,26 @@ def Cov(xs, ys, mux=None, muy=None):
     return total / len(xs)
 
 
+def Mean(xs):
+    """Computes mean.
+
+    xs: sequence of values
+
+    returns: float mean
+    """
+    return numpy.mean(xs)
+
+
+def Var(xs, ddof=None):
+    """Computes variance.
+
+    xs: sequence of values
+
+    returns: float
+    """
+    return numpy.var(xs, ddof=ddof)
+
+
 def MeanVar(xs):
     """Computes mean and variance.
 
@@ -1922,6 +1947,54 @@ def MeanVar(xs):
     returns: pair of float, mean and var
     """
     return numpy.mean(xs), numpy.var(xs)
+
+
+def Trim(t, p=0.01):
+    """Trims the largest and smallest elements of t.
+
+    Args:
+        t: sequence of numbers
+        p: fraction of values to trim off each end
+
+    Returns:
+        sequence of values
+    """
+    n = int(p * len(t))
+    t = sorted(t)[n:-n]
+    return t
+
+
+def TrimmedMean(t, p=0.01):
+    """Computes the trimmed mean of a sequence of numbers.
+
+    Side effect: sorts the list.
+
+    Args:
+        t: sequence of numbers
+        p: fraction of values to trim off each end
+
+    Returns:
+        float
+    """
+    t = Trim(t, p)
+    return Mean(t)
+
+
+def TrimmedMeanVar(t, p=0.01):
+    """Computes the trimmed mean and variance of a sequence of numbers.
+
+    Side effect: sorts the list.
+
+    Args:
+        t: sequence of numbers
+        p: fraction of values to trim off each end
+
+    Returns:
+        float
+    """
+    t = Trim(t, p)
+    mu, var = MeanVar(t)
+    return mu, var
 
 
 def Corr(xs, ys):
